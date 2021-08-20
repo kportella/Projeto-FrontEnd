@@ -12,6 +12,7 @@ export async function EnvioProposta(proposta, token) {
 export async function ConsultarCEP(body, token) {
 
     if (body.CEP !== "") {
+        console.log(localStorage.getItem('token'))
         let validaCep = /^[0-9]{8}$/;
         if (validaCep.test(body.CEP)) {
             const response = await fetch('http://localhost:5000/api/cep', {
@@ -24,15 +25,15 @@ export async function ConsultarCEP(body, token) {
             if (!("erro" in response))
                 return (response)
             else {
-                return 3;
+                return "CEP não encontrado";
             }
         }
         else {
-            return (1);
+            return "Formato de CEP inválido";
         }
     }
     else {
-        return (2)
+        return "CEP vazio"
     }
 }
 

@@ -1,9 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 import './CadastroCliente.css';
-import Form from '../../components/Form'
-import Label from '../../components/Label'
 import { CalcularValor, ConsultarCEP, ConsultarConveniada, EnvioProposta } from '../../services/proposta'
 import { AuthContext } from '../../contexts/auth';
+import { Link, Redirect } from 'react-router-dom';
 
 
 
@@ -61,8 +60,6 @@ function Cadastro() {
             Data_Atualizacao: dataAtualizacao
         }
 
-        console.log(TreinaPropostasEntity)
-
         const isEmpty = ((obj) => {
             const element = new Array;
             let aux = Object.entries(obj);
@@ -74,20 +71,22 @@ function Cadastro() {
                     if (isNaN(aux[x][1])) element.push(aux[x][0])
                 }
             }
-            console.log(element)
             return element;
         })
-        const vazio = isEmpty(TreinaPropostasEntity);
-        vazio.push(isEmpty(TreinaClientesEntity))
-        if (vazio.length === 1) {
+        const testeProposta = isEmpty(TreinaPropostasEntity);
+        const testeCliente = isEmpty(TreinaClientesEntity);
+        const total = [...testeProposta, ...testeCliente]
+        console.log(total);
+        if (total.length === 0) {
             EnvioProposta({ TreinaPropostasEntity, TreinaClientesEntity }, token);
             alert('Proposta Cadastrada')
         }
         else {
-            if (vazio.length > 2) alert(`Os campos ${vazio} são obrigatorios`);
-            else alert(`O campo ${vazio} é obrigatorio`)
+            if (total.length > 1) alert(`Os campos ${total} são obrigatorios`);
+            else alert(`O campo ${total} é obrigatorio`)
         }
     }
+
 
     const handleValorSolicitado = async (e) => {
         e.preventDefault();
@@ -97,7 +96,6 @@ function Cadastro() {
             return alert("Valor Solicitado e/ou Prazo não podem ser vazios")
         }
         const valorRecebido = await CalcularValor({ Prazo, Vlr_Solicitado }, token);
-        console.log(valorRecebido.vlr_Solicitado)
         setValorFinanciado(valorRecebido.vlr_Solicitado)
     }
 
