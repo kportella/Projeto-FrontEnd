@@ -59,3 +59,27 @@ export async function CalcularValor(param, token) {
 
     return await response.json();
 }
+
+
+export function calcularIdade(dataNascimento) {
+    const anoNascimento = dataNascimento.getFullYear();
+    const mesNascimento = dataNascimento.getMonth();
+    const diaNascimento = dataNascimento.getDate()
+
+    const dataAtual = new Date()
+    const anoAtual = dataAtual.getFullYear()
+    const mesAtual = dataAtual.getMonth() + 1
+    const diaAtual = dataAtual.getDate()
+
+    let quantos_anos = anoAtual - anoNascimento;
+
+    if (mesAtual < mesNascimento || mesAtual == mesNascimento && diaAtual < diaNascimento) {
+        quantos_anos--;
+    }
+    if (quantos_anos >= 18) {
+        return true
+    }
+    else {
+        return false
+    }
+}

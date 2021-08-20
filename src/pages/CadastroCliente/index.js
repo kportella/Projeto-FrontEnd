@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import './CadastroCliente.css';
-import { CalcularValor, ConsultarCEP, ConsultarConveniada, EnvioProposta } from '../../services/proposta'
+import { calcularIdade, CalcularValor, ConsultarCEP, ConsultarConveniada, EnvioProposta } from '../../services/proposta'
 import { AuthContext } from '../../contexts/auth';
 import { Link, Redirect } from 'react-router-dom';
 
@@ -32,58 +32,63 @@ function Cadastro() {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const TreinaPropostasEntity = {
-            CPF: cpf,
-            Conveniada: conveniada,
-            Vlr_Solicitado: parseFloat(valorSolicitado),
-            Prazo: parseInt(prazo),
-            Observacao: observacao,
-            Vlr_Financiado: parseFloat(valorFinanciado),
-            Situacao: "AG",
-            Dt_Situacao: dataSituacao,
-            Usuario: usuario,
-            Usuario_Atualizacao: "SISTEMA",
-            Data_Atualizacao: dataAtualizacao
-        }
-        const TreinaClientesEntity = {
-            CPF: cpf,
-            Nome: nome,
-            Dt_Nascimento: new Date(dataNascimento),
-            Genero: genero,
-            Vlr_Salario: parseFloat(valorSalario),
-            Logradouro: logradouro,
-            Numero_Residencia: numeroResidencia,
-            Bairro: bairro,
-            Cidade: cidade,
-            CEP: cep,
-            Usuario_Atualizacao: "SISTEMA",
-            Data_Atualizacao: dataAtualizacao
-        }
-
-        const isEmpty = ((obj) => {
-            const element = new Array;
-            let aux = Object.entries(obj);
-            for (let x = 0; x < aux.length; x++) {
-                if (aux[x][1] === '' && aux[x][0] != 'Observacao') {
-                    element.push(aux[x][0])
-                }
-                else if (typeof aux[x][1] === 'number') {
-                    if (isNaN(aux[x][1])) element.push(aux[x][0])
-                }
+        console.log(typeof dataNascimento, new Date(dataNascimento))
+        const idadePermitida = calcularIdade(new Date(dataNascimento))
+        if (idadePermitida) {
+            const TreinaPropostasEntity = {
+                CPF: cpf,
+                Conveniada: conveniada,
+                Vlr_Solicitado: parseFloat(valorSolicitado),
+                Prazo: parseInt(prazo),
+                Observacao: observacao,
+                Vlr_Financiado: parseFloat(valorFinanciado),
+                Situacao: "AG",
+                Dt_Situacao: dataSituacao,
+                Usuario: usuario,
+                Usuario_Atualizacao: "SISTEMA",
+                Data_Atualizacao: dataAtualizacao
             }
-            return element;
-        })
-        const testeProposta = isEmpty(TreinaPropostasEntity);
-        const testeCliente = isEmpty(TreinaClientesEntity);
-        const total = [...testeProposta, ...testeCliente]
-        console.log(total);
-        if (total.length === 0) {
-            EnvioProposta({ TreinaPropostasEntity, TreinaClientesEntity }, token);
-            alert('Proposta Cadastrada')
+            const TreinaClientesEntity = {
+                CPF: cpf,
+                Nome: nome,
+                Dt_Nascimento: new Date(dataNascimento),
+                Genero: genero,
+                Vlr_Salario: parseFloat(valorSalario),
+                Logradouro: logradouro,
+                Numero_Residencia: numeroResidencia,
+                Bairro: bairro,
+                Cidade: cidade,
+                CEP: cep,
+                Usuario_Atualizacao: "SISTEMA",
+                Data_Atualizacao: dataAtualizacao
+            }
+
+            const isEmpty = ((obj) => {
+                const element = new Array;
+                let aux = Object.entries(obj);
+                for (let x = 0; x < aux.length; x++) {
+                    if (aux[x][1] === '' && aux[x][0] != 'Observacao') {
+                        element.push(aux[x][0])
+                    }
+                    else if (typeof aux[x][1] === 'number') {
+                        if (isNaN(aux[x][1])) element.push(aux[x][0])
+                    }
+                }
+                return element;
+            })
+            const total = [...isEmpty(TreinaPropostasEntity), ...isEmpty(TreinaClientesEntity)]
+            console.log(total);
+            if (total.length === 0) {
+                EnvioProposta({ TreinaPropostasEntity, TreinaClientesEntity }, token);
+                alert('Proposta Cadastrada')
+            }
+            else {
+                if (total.length > 1) alert(`Os campos ${total} são obrigatorios`);
+                else alert(`O campo ${total} é obrigatorio`)
+            }
         }
         else {
-            if (total.length > 1) alert(`Os campos ${total} são obrigatorios`);
-            else alert(`O campo ${total} é obrigatorio`)
+            alert("Usuário menor de idade!")
         }
     }
 
