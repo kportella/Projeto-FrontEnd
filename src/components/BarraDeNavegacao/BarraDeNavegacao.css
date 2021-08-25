@@ -1,0 +1,66 @@
+header {
+    position: relative;
+    top: 0;
+    height: auto;
+    width: 100%;
+}
+
+.container {
+    max-width: 1920px;
+    width: 100%;
+}
+
+header {
+    position: relative;
+    top: 0;
+    height: auto;
+    width: 100%;
+}
+
+nav {
+    position: fixed;
+    top: 0;
+    height: 60px;
+    width: 100%;
+    z-index: 1;
+    background-color: #FFF;
+    border-bottom: 1px solid #CCC;
+}
+
+nav::after{
+    clear: both;
+    content: "";
+    display: block;
+}
+
+.nav-container {
+    max-width: 1200px;
+    position: relative;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.nav-container ul {
+    float: right;
+    height: 100px;
+    line-height: 100px;
+    margin-top: -20px;
+}
+
+.nav-container li {
+    list-style: none;
+    float: left;
+    margin: 0 15px;
+    
+}
+
+.nav-container li a {
+    text-decoration: none;
+    color: #666;
+    transition: .5s;
+}
+
+.nav-container li a:hover{
+    color: #3381F3;
+}
+

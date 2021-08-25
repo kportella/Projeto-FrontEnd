@@ -1,4 +1,5 @@
 import { useState, createContext } from "react";
+import { useHistory } from "react-router-dom";
 
 export const AuthContext = createContext({})
 
@@ -16,13 +17,18 @@ function AuthProvider({ children }) {
             })
 
         if (response.ok) {
-            setToken(await response.json());
+            //setToken();
+            sessionStorage.token = await response.json().then((e) => e.token)
+            return 1;
+
         }
         else if (response.status === 403) {
             alert("Senha expirada")
+            return 0;
         }
         else if (response.status === 404) {
             alert("Usuario/Senha não encontrado")
+            return 0;
         }
     }
 

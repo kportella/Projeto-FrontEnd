@@ -1,17 +1,23 @@
 import './Login.css';
 import { useState, useContext } from 'react'
 import { AuthContext } from '../../contexts/auth'
+import { useHistory } from 'react-router-dom';
 
 function Login() {
     const [usuario, setUsername] = useState("");
     const [senha, setPassword] = useState("");
+    let history = useHistory()
 
     const { SignIn } = useContext(AuthContext)
 
     const handleSubmit = async (evt) => {
         evt.preventDefault();
 
-        SignIn({ usuario, senha })
+        let control = await SignIn({ usuario, senha })
+        console.log(sessionStorage.getItem('token'))
+        if (control) {
+            history.push('/cadastroproposta')
+        }
     }
     return (
         <div>

@@ -1,14 +1,33 @@
-import { Switch } from "react-router-dom";
-import Route from './Route'
+import { Switch, BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 
 import Login from '../pages/Login'
 import CadastroCliente from '../pages/CadastroCliente'
+import ConsultarProposta from '../pages/ConsultarProposta'
+
+const PrivateRoute = ({ component: Component, ...rest }) => (
+    <Route
+        {...rest}
+        render={props =>
+            sessionStorage.token ? (
+                <Component {...props} />
+            ) : (
+                <Redirect to={{ pathname: "/", state: { from: props.location } }} />
+            )
+        }
+    />
+);
 
 export default function Routes() {
     return (
-        <Switch>
-            <Route path="/" component={Login} />
-            <Route path="/cadastrocliente" component={CadastroCliente} />
-        </Switch>
+        < Router >
+            <Switch>
+                <Route exact path='/' component={Login}>
+                </Route>
+                <PrivateRoute exact path='/cadastroproposta' component={CadastroCliente}>
+                </PrivateRoute>
+                <PrivateRoute exact path='/consultarproposta' component={ConsultarProposta}>
+                </PrivateRoute>
+            </Switch>
+        </Router >
     )
 }
