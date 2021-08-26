@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import './CadastroCliente.css';
 import { calcularIdade, CalcularValor, ConsultarCEP, ConsultarConveniada, EnvioProposta, ValidarCPF } from '../../services/proposta'
 import { AuthContext } from '../../contexts/auth';
@@ -8,7 +8,9 @@ import BarraDeNavegacao from '../../components/BarraDeNavegacao'
 function Cadastro() {
 
     const { usuario } = useContext(AuthContext)
+    const regexp = /^[0-9\b]+$/
 
+    const [hasError, setHasError] = useState(false);
     const [cpf, setCPF] = useState('');
     const [nome, setNome] = useState('');
     const [conveniada, setConveniada] = useState('000020');
@@ -31,7 +33,6 @@ function Cadastro() {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        console.log(typeof dataNascimento, new Date(dataNascimento))
         const idadePermitida = calcularIdade(new Date(dataNascimento))
         const TreinaPropostasEntity = {
             CPF: cpf,
@@ -42,7 +43,7 @@ function Cadastro() {
             Vlr_Financiado: parseFloat(valorFinanciado),
             Situacao: "AG",
             Dt_Situacao: dataSituacao,
-            Usuario: usuario,
+            Usuario: sessionStorage.usuario,
             Usuario_Atualizacao: "SISTEMA",
             Data_Atualizacao: dataAtualizacao
         }
@@ -75,7 +76,6 @@ function Cadastro() {
             return element;
         })
         const total = [...isEmpty(TreinaPropostasEntity), ...isEmpty(TreinaClientesEntity)]
-        console.log(total);
         if (total.length === 0) {
             if (idadePermitida && (ValidarCPF(cpf))) {
                 EnvioProposta({ TreinaPropostasEntity, TreinaClientesEntity });
@@ -111,12 +111,12 @@ function Cadastro() {
         }
         const response = await ConsultarCEP(body);
         if (response === 1) {
-            alert("Formato de CEP inválido")
+            alert("CEP não encontrado")
         }
         else if (response === 2) {
             alert("Formato de CEP inválido")
         } else if (response === 3) {
-            alert("CPF inválido")
+            alert("CEP vazio")
         }
         else {
             setLogradouro(response.logradouro);
@@ -124,6 +124,25 @@ function Cadastro() {
             setCidade(response.localidade);
         }
     }
+
+    const onHandleSetCPF = (e) => {
+        if (e.target.value === '' || regexp.test(e.target.value)) setCPF(e.target.value)
+    }
+
+    const onHandleSetCEP = (e) => {
+        if (e.target.value === '' || regexp.test(e.target.value)) setCEP(e.target.value)
+    }
+
+    const onHandleCPF = useCallback((e) => {
+        if (ValidarCPF(e.target.value)) {
+            setHasError(false)
+
+        }
+        else {
+            setHasError(true)
+        }
+    }, []);
+
     useEffect(() => {
         ConsultarConveniada().then(conveniada => {
             setConveniadas(conveniada);
@@ -146,7 +165,9 @@ function Cadastro() {
                         <div className="campo">
                             <div className='pessoal'>
                                 <label for="cpf">CPF</label>
-                                <input type='text' name='cpf' id="cpf" value={cpf} onChange={e => setCPF(e.target.value)} maxLength='11' />
+                                <input type='text' name='cpf' id="cpf" value={cpf} onChange={e => onHandleSetCPF(e)}
+                                    maxLength='11' onBlur={e => onHandleCPF(e)}
+                                    className={hasError ? 'erro' : ' '} />
                                 <label for="nome">Nome</label>
                                 <input type='text' name='nome' id='nome' value={nome} onChange={e => setNome(e.target.value)} />
                                 <label for="salario">Valor do Salario</label>
@@ -154,7 +175,8 @@ function Cadastro() {
                                     onChange={e => setValorSalario(e.target.value)} />
                                 <label for="dataNascimento">Data de Nascimento</label>
                                 <input type='date' name='dataNascimento' id='dataNascimento' value={dataNascimento}
-                                    onChange={e => setDataNascimento(e.target.value)} />
+                                    onChange={e => setDataNascimento(e.target.value)}
+                                    max={new Date().toISOString().split('T')[0]} />
                                 <label for='genero'>Genero</label>
                                 <select name='genero' id='genero' value={genero} onChange={e => setGenero(e.target.value)}>
                                     <option value='M'>Masculino</option>
@@ -163,8 +185,8 @@ function Cadastro() {
                             </div>
                             <div className='endereco'>
                                 <label for='CEP'>CEP</label>
-                                <input type='text' name='CEP' id='CEP' value={cep} onChange={e => setCEP(e.target.value)} />
-                                <button onClick={handleCEP} className='CEPButton'>Consultar CEP</button>
+                                <input type='text' name='CEP' id='CEP' maxLength='9' value={cep} onChange={e => onHandleSetCEP(e)} />
+                                <button onClick={e => handleCEP(e)} className='CEPButton'>Consultar CEP</button>
                                 <label for='numeroResidencia'>Numero da Residencia</label>
                                 <input type='text' name='numeroResidencia' id='numeroResidencia' value={numeroResidencia}
                                     onChange={e => setNumeroResidencia(e.target.value)} />

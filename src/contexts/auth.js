@@ -8,7 +8,8 @@ function AuthProvider({ children }) {
     const [usuario, setUsuario] = useState(null)
 
     async function SignIn(credentials) {
-        setUsuario(credentials.usuario)
+        sessionStorage.usuario = credentials.usuario
+        console.log(credentials.usuario)
         const response = await fetch('http://localhost:5000/api/login/',
             {
                 method: 'POST', headers: {
@@ -17,7 +18,6 @@ function AuthProvider({ children }) {
             })
 
         if (response.ok) {
-            //setToken();
             sessionStorage.token = await response.json().then((e) => e.token)
             return 1;
 

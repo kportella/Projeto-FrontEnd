@@ -24,15 +24,15 @@ export async function ConsultarCEP(body) {
             if (!("erro" in response))
                 return (response)
             else {
-                return "CEP não encontrado";
+                return 1;
             }
         }
         else {
-            return "Formato de CEP inválido";
+            return 2;
         }
     }
     else {
-        return "CEP vazio"
+        return 3
     }
 }
 
@@ -88,6 +88,8 @@ export function ValidarCPF(strCPF) {
     let Resto;
     Soma = 0;
     let CPFInvalido = true;
+
+    if (strCPF.length < 11) return false
 
     for (let i = 0; i < strCPF.length; i++) {
         if (strCPF[0] != strCPF[i]) {
