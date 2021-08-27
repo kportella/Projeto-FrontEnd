@@ -5,7 +5,7 @@ export async function EnvioProposta(proposta) {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + sessionStorage.token
             }, body: JSON.stringify(proposta)
-        })
+        }).then(e => e.json())
     return response;
 }
 

@@ -67,7 +67,7 @@ function Cadastro() {
             const element = new Array;
             let aux = Object.entries(obj);
             for (let x = 0; x < aux.length; x++) {
-                if (aux[x][1] === '' && aux[x][0] != 'Observacao') {
+                if (aux[x][1] === '' && aux[x][0] != 'Observacao' && aux[x][0] != 'Proposta') {
                     element.push(aux[x][0])
                 }
                 else if (typeof aux[x][1] === 'number') {
@@ -79,8 +79,9 @@ function Cadastro() {
         const total = [...isEmpty(TreinaPropostasEntity), ...isEmpty(TreinaClientesEntity)]
         if (total.length === 0) {
             if (idadePermitida && (ValidarCPF(cpf))) {
-                EnvioProposta({ TreinaPropostasEntity, TreinaClientesEntity });
+                const response = await EnvioProposta({ TreinaPropostasEntity, TreinaClientesEntity });
                 alert('Proposta Cadastrada')
+                setProposta(response);
             }
             else {
                 if (!idadePermitida) alert("Usuário menor de idade")
@@ -171,7 +172,7 @@ function Cadastro() {
             setPrazo('')
             setObservacao('')
             setDataNascimento('')
-            setGenero('')
+            setGenero('M')
             setValorSalario('')
             setCEP('')
             setNumeroResidencia('')
@@ -179,6 +180,7 @@ function Cadastro() {
             setLogradouro('')
             setBairro('')
             setCidade('')
+            setConveniada('000020')
         }
     }
 
@@ -204,7 +206,7 @@ function Cadastro() {
                         <div className="campo">
                             <div className='pessoal'>
                                 <label for="proposta">Proposta</label>
-                                <input type="text" name="proposta" id="proposta" value={proposta} />
+                                <input type="text" name="proposta" id="proposta" value={proposta} readonly />
                                 <label for="cpf">CPF</label>
                                 <input type='text' name='cpf' id="cpf" value={cpf} onChange={e => onHandleSetCPF(e)}
                                     maxLength='11' onBlur={e => onHandleCPF(e)}
