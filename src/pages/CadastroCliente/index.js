@@ -1,6 +1,6 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
 import './CadastroCliente.css';
-import { calcularIdade, CalcularValor, ConsultarCEP, ConsultarConveniada, EnvioProposta, ValidarCPF } from '../../services/proposta'
+import { calcularIdade, CalcularValor, ConsultarCEP, ConsultarConveniada, ConsultarCPF, EnvioProposta, ValidarCPF } from '../../services/proposta'
 import { AuthContext } from '../../contexts/auth';
 import BarraDeNavegacao from '../../components/BarraDeNavegacao'
 
@@ -143,6 +143,26 @@ function Cadastro() {
         }
     }, []);
 
+    const buttonConsultarCPF = async (e) => {
+        e.preventDefault();
+        const response = await ConsultarCPF(cpf);
+        if (response.treinaClientesEntity != null && response.treinaPropostasEntity != null) {
+            setNome(response.treinaClientesEntity.nome)
+            setValorSolicitado(response.treinaPropostasEntity.vlr_Solicitado)
+            setPrazo(response.treinaPropostasEntity.prazo)
+            setObservacao(response.treinaPropostasEntity.observacao)
+            setDataNascimento(new Date(response.treinaClientesEntity.dt_Nascimento).toISOString().split('T')[0])
+            setGenero(response.treinaClientesEntity.genero)
+            setValorSalario(response.treinaClientesEntity.vlr_Salario)
+            setCEP(response.treinaClientesEntity.cep)
+            setNumeroResidencia(response.treinaClientesEntity.numero_Residencia)
+            setValorFinanciado(response.treinaPropostasEntity.vlr_Financiado)
+            setLogradouro(response.treinaClientesEntity.logradouro)
+            setBairro(response.treinaClientesEntity.bairro)
+            setCidade(response.treinaClientesEntity.cidade)
+        }
+    }
+
     useEffect(() => {
         ConsultarConveniada().then(conveniada => {
             setConveniadas(conveniada);
@@ -168,6 +188,7 @@ function Cadastro() {
                                 <input type='text' name='cpf' id="cpf" value={cpf} onChange={e => onHandleSetCPF(e)}
                                     maxLength='11' onBlur={e => onHandleCPF(e)}
                                     className={hasError ? 'erro' : ' '} />
+                                <button className='consultarCPF' onClick={e => buttonConsultarCPF(e)}>Consultar CPF</button>
                                 <label for="nome">Nome</label>
                                 <input type='text' name='nome' id='nome' value={nome} onChange={e => setNome(e.target.value)} />
                                 <label for="salario">Valor do Salario</label>

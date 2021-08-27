@@ -9,6 +9,17 @@ export async function EnvioProposta(proposta) {
     return response;
 }
 
+export async function ConsultarCPF(cpf) {
+    const response = await fetch(`http://localhost:5000/api/proposta/${cpf}`,
+        {
+            method: 'GET', headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + sessionStorage.token
+            }
+        }).then(e => e.json())
+    return response;
+}
+
 export async function ConsultarCEP(body) {
 
     if (body.CEP !== "") {
