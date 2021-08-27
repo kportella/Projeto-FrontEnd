@@ -6,10 +6,9 @@ import BarraDeNavegacao from '../../components/BarraDeNavegacao'
 
 
 function Cadastro() {
-
-    const { usuario } = useContext(AuthContext)
     const regexp = /^[0-9\b]+$/
 
+    const [isReadOnly, setIsReadOnly] = useState(false);
     const [hasError, setHasError] = useState(false);
     const [proposta, setProposta] = useState('');
     const [cpf, setCPF] = useState('');
@@ -150,6 +149,7 @@ function Cadastro() {
         const response = await ConsultarCPF(cpf);
         console.log(response)
         if (response.treinaClientesEntity != null && response.treinaPropostasEntity != null) {
+            setIsReadOnly(true)
             setProposta(response.treinaPropostasEntity.proposta)
             setNome(response.treinaClientesEntity.nome)
             setValorSolicitado(response.treinaPropostasEntity.vlr_Solicitado)
@@ -206,11 +206,13 @@ function Cadastro() {
                         <div className="campo">
                             <div className='pessoal'>
                                 <label for="proposta">Proposta</label>
-                                <input type="text" name="proposta" id="proposta" value={proposta} readonly />
+                                <input type="text" name="proposta" id="proposta" value={proposta} className="readonly"
+                                    readOnly={true} />
                                 <label for="cpf">CPF</label>
                                 <input type='text' name='cpf' id="cpf" value={cpf} onChange={e => onHandleSetCPF(e)}
                                     maxLength='11' onBlur={e => onHandleCPF(e)}
-                                    className={hasError ? 'erro' : ' '} />
+                                    className={hasError ? 'erro' : ' '}
+                                    readOnly={isReadOnly} />
                                 <button className='consultarCPF' onClick={e => buttonConsultarCPF(e)}>Consultar CPF</button>
                                 <label for="nome">Nome</label>
                                 <input type='text' name='nome' id='nome' value={nome} onChange={e => setNome(e.target.value)} />
@@ -235,11 +237,11 @@ function Cadastro() {
                                 <input type='text' name='numeroResidencia' id='numeroResidencia' value={numeroResidencia}
                                     onChange={e => setNumeroResidencia(e.target.value)} />
                                 <label for='logradouro'>Logradouro</label>
-                                <input type="text" name="logradouro" id='logradouro' value={logradouro} />
+                                <input type="text" name="logradouro" id='logradouro' value={logradouro} readOnly={true} className='readonly' />
                                 <label for='bairro'>Bairro</label>
-                                <input type="text" name="bairro" id='bairro' value={bairro} />
+                                <input type="text" name="bairro" id='bairro' value={bairro} readOnly={true} className='readonly' />
                                 <label for='cidade'>Cidade</label>
-                                <input type="text" name="cidade" id='cidade' value={cidade} />
+                                <input type="text" name="cidade" id='cidade' value={cidade} readOnly={true} className='readonly' />
                             </div>
                         </div>
                     </fieldset>
@@ -257,9 +259,11 @@ function Cadastro() {
                             <label for='prazo'>Prazo</label>
                             <input type='number' name='prazo' id='prazo' value={prazo} onChange={e => setPrazo(e.target.value)} />
                             <label for='valorFinanciado'>Valor Financiado</label>
-                            <input type="number" name="valorFinanciado" id='valorFinanciado' value={valorFinanciado} />
+                            <input type="number" name="valorFinanciado" id='valorFinanciado' value={valorFinanciado} readOnly={true}
+                                className='readonly' />
                             <label for='observacao'>Observação</label>
-                            <textarea name='observacao' id='observacao' value={observacao}></textarea>
+                            <textarea name='observacao' id='observacao' value={observacao} readOnly={true} className='readonly'></textarea>
+                            <button onClick={handleSubmit}>Gravar Proposta</button>
 
                             <input type='submit' value='Submit' id='log' />
                         </div>

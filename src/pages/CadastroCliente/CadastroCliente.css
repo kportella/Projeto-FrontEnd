@@ -75,3 +75,7 @@ button{
 .erro{
     border: 3px solid red !important;
 }
+
+.readonly {
+    background-color: #E0E0F8;
+}
