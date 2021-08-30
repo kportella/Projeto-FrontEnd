@@ -1,5 +1,4 @@
 import { useState, createContext } from "react";
-import { useHistory } from "react-router-dom";
 
 export const AuthContext = createContext({})
 
@@ -7,7 +6,7 @@ function AuthProvider({ children }) {
     const [token, setToken] = useState(null)
     const [usuario, setUsuario] = useState(null)
 
-    async function SignIn(credentials) {
+    async function SignIn(credentials, setErroMessage) {
         sessionStorage.usuario = credentials.usuario
         console.log(credentials.usuario)
         const response = await fetch('http://localhost:5000/api/login/',
@@ -23,11 +22,11 @@ function AuthProvider({ children }) {
 
         }
         else if (response.status === 403) {
-            alert("Senha expirada")
+            setErroMessage("Senha expirada")
             return 0;
         }
         else if (response.status === 404) {
-            alert("Usuario/Senha não encontrado")
+            setErroMessage("Usuario/Senha não encontrado")
             return 0;
         }
     }

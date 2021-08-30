@@ -9,6 +9,18 @@ export async function EnvioProposta(proposta) {
     return response;
 }
 
+export async function VerificarSituacao(situacao) {
+    const response = await fetch(`http://localhost:5000/api/situacaoproposta/${situacao}`,
+        {
+            method: 'GET', headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + sessionStorage.token
+            }
+        }).then(e => e.json())
+
+    return response.descricao;
+}
+
 export async function ConsultarCPF(cpf) {
     const response = await fetch(`http://localhost:5000/api/proposta/${cpf}`,
         {
@@ -72,14 +84,15 @@ export async function CalcularValor(param) {
 
 
 export function calcularIdade(dataNascimento) {
+    console.log(dataNascimento)
     const anoNascimento = dataNascimento.getFullYear();
-    const mesNascimento = dataNascimento.getMonth();
+    const mesNascimento = dataNascimento.getMonth() + 1;
     const diaNascimento = dataNascimento.getDate()
 
     const dataAtual = new Date()
     const anoAtual = dataAtual.getFullYear()
     const mesAtual = dataAtual.getMonth() + 1
-    const diaAtual = dataAtual.getDate()
+    const diaAtual = dataAtual.getDate() - 1
 
     let quantos_anos = anoAtual - anoNascimento;
 
@@ -90,6 +103,13 @@ export function calcularIdade(dataNascimento) {
         return true
     }
     else {
+        if (anoNascimento > anoAtual) alert('Data futuro não permitido')
+        else if (anoNascimento == anoAtual) {
+            if (mesNascimento > mesAtual) alert('Data futuro não permitido')
+            else if (mesAtual == mesNascimento) {
+                if (diaNascimento > diaAtual) alert('Data futuro não permitida')
+            }
+        }
         return false
     }
 }
@@ -125,3 +145,17 @@ export function ValidarCPF(strCPF) {
     if (Resto != parseInt(strCPF.substring(10, 11))) return false;
     return true;
 }
+
+export const isEmpty = ((obj) => {
+    const element = new Array;
+    let aux = Object.entries(obj);
+    for (let x = 0; x < aux.length; x++) {
+        if (aux[x][1] === '' && aux[x][0] != 'Observacao' && aux[x][0] != 'Proposta') {
+            element.push(aux[x][0])
+        }
+        else if (typeof aux[x][1] === 'number') {
+            if (isNaN(aux[x][1])) element.push(aux[x][0])
+        }
+    }
+    return element;
+})

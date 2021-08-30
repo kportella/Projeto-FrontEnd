@@ -1,14 +1,17 @@
+import './App.css';
 import { BrowserRouter } from 'react-router-dom'
 import Routes from './routes'
 import AuthProvider from './contexts/auth';
-import './Ap.css'
+import PropostaProvider from './contexts/proposta';
 
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Routes />
-      </BrowserRouter>
+      <PropostaProvider>
+        <BrowserRouter>
+          <Routes />
+        </BrowserRouter>
+      </PropostaProvider>
     </AuthProvider>
   );
 }

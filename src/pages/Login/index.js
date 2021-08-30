@@ -1,53 +1,66 @@
-import './Login.css';
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { AuthContext } from '../../contexts/auth'
 import { useHistory } from 'react-router-dom';
+import { Typography, TextField, Button, Grid } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
+import '@fontsource/roboto'
+import './Login.css'
 
 function Login() {
-    const [usuario, setUsername] = useState("");
-    const [senha, setPassword] = useState("");
-    let history = useHistory()
+    const [usuario, setUsuario] = useState("");
+    const [senha, setSenha] = useState("");
+    const [error, setError] = useState(false)
+    const [errorMessage, setErroMessage] = useState('')
+
+    let history = useHistory();
 
     const { SignIn } = useContext(AuthContext)
 
     const handleSubmit = async (evt) => {
         evt.preventDefault();
 
-        let control = await SignIn({ usuario, senha })
+        let control = await SignIn({ usuario, senha }, setErroMessage)
         console.log(sessionStorage.getItem('token'))
         if (control) {
             history.push('/cadastroproposta')
         }
+        else {
+            setError(true)
+        }
     }
+
+    useEffect(() => sessionStorage.removeItem('token'))
+
     return (
-        <div>
-            <h2>Login</h2>
-            <div className='login'>
-                <form onSubmit={handleSubmit}>
-                    <label>
-                        Username
-                        <input type='text'
-                            name='user'
-                            value={usuario}
-                            onChange={e => setUsername(e.target.value)}
-                            id='uname'></input>
-                    </label>
-                    <br />
-                    <label>
-                        Password
-                        <input type='password'
-                            name='password'
-                            values={senha}
-                            onChange={e => setPassword(e.target.value)}
-                            id='password'></input>
-                    </label>
-                    <br />
-                    <br />
-                    <input type='submit' value='Submit' id='log' />
-                </form>
-            </div>
-        </div >
-    );
+        <Grid container
+            direction='row'
+            justifyContent='center'
+            alignItems='center'
+            className='container'
+        >
+            <Grid item xs={6}>
+                {error ? <Alert severity="error">{errorMessage}</Alert> : <></>}
+                <Typography variant='h4' component='h1' align='left'>Login</Typography>
+                <Typography variant='h6' component='h2' align='left'>Coloque usuário e senha</Typography>
+                <TextField label='Usuário'
+                    id='usuario'
+                    fullWidth margin='normal'
+                    value={usuario}
+                    onChange={e => setUsuario(e.target.value)} />
+                <TextField label='Senha'
+                    id='senha'
+                    type='password'
+                    fullWidth margin='normal'
+                    value={senha}
+                    onChange={e => setSenha(e.target.value)} />
+
+                <Button type='submit' variant='contained' color='primary' onClick={e => handleSubmit(e)}>
+                    Entrar
+                </Button>
+            </Grid>
+
+        </Grid>
+    )
 }
 
 export default Login;
