@@ -2,6 +2,7 @@ import { Switch, BrowserRouter as Router, Route, Redirect } from "react-router-d
 
 import Login from '../pages/Login'
 import CadastroProposta from '../pages/CadastroProposta'
+import ConsultarProposta from "../pages/ConsultaProposta";
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route
@@ -24,6 +25,8 @@ export default function Routes() {
                 </Route>
                 <PrivateRoute exact path='/cadastroproposta' component={CadastroProposta}>
                 </PrivateRoute>
+
+                <PrivateRoute exact path='/consultarproposta' component={ConsultarProposta} />
             </Switch>
         </Router >
     )
