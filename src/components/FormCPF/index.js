@@ -5,7 +5,7 @@ import { ValidarCPF } from '../../services/proposta'
 
 
 function FormCPF() {
-    const { cpf, setCPF, buttonConsultarCPF, regexp, setHasError, hasError, isReadOnly } = useContext(PropostaContext)
+    const { cpf, setCPF, buttonConsultarCPF, regexp, setHasError, hasError } = useContext(PropostaContext)
 
     const onHandleSetCPF = (e) => {
         if ((e.target.value === '' || regexp.test(e.target.value)) && e.target.value.length <= 11) setCPF(e.target.value)

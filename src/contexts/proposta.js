@@ -72,8 +72,7 @@ function PropostaProvider({ children }) {
                 setProposta(response);
             }
             else {
-                if (!idadePermitida) alert("Usuário menor de idade")
-                else alert('CPF inválido')
+                if (idadePermitida) alert('CPF inválido')
             }
         }
         else {

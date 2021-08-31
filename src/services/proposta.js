@@ -21,6 +21,17 @@ export async function VerificarSituacao(situacao) {
     return response.descricao;
 }
 
+export async function PegarTodasPropostas() {
+    const response = await fetch(`http://localhost:5000/api/proposta/usuario/${sessionStorage.usuario}`,
+        {
+            method: 'GET', headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + sessionStorage.token
+            }
+        }).then(e => e.json())
+    return response;
+}
+
 export async function ConsultarCPF(cpf) {
     const response = await fetch(`http://localhost:5000/api/proposta/${cpf}`,
         {
@@ -110,6 +121,7 @@ export function calcularIdade(dataNascimento) {
                 if (diaNascimento > diaAtual) alert('Data futuro não permitida')
             }
         }
+        else alert('Usuario menor de idade')
         return false
     }
 }
