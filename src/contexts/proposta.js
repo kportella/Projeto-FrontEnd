@@ -192,9 +192,9 @@ function PropostaProvider({ children }) {
             handleValorSolicitado,
             handleCEP,
             handleSubmit,
-            regexp,
-            situacao,
-            usuario,
+            situacao, setDataSituacao,
+            regexp, setSituacao,
+            usuario, setUsuario,
             descricaoSituacao
         }}>
             {children}

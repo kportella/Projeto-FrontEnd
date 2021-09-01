@@ -21,6 +21,16 @@ export async function VerificarSituacao(situacao) {
     return response.descricao;
 }
 
+export async function TodasDescricoes() {
+    const response = await fetch('http://localhost:5000/api/situacaoproposta', {
+        method: 'GET', headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + sessionStorage.token
+        }
+    }).then(e => e.json())
+    return response
+}
+
 export async function PegarTodasPropostas() {
     const response = await fetch(`http://localhost:5000/api/proposta/usuario/${sessionStorage.usuario}`,
         {
@@ -171,3 +181,11 @@ export const isEmpty = ((obj) => {
     }
     return element;
 })
+
+export const mCPF = (cpf) => {
+    cpf = cpf.replace(/\D/g, "")
+    cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2")
+    cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2")
+    cpf = cpf.replace(/(\d{3})(\d{1,2})$/, "$1-$2")
+    return cpf
+}

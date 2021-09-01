@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom'
 import './BarraNavegacao.css'
 
 function BarraNavegacao() {
-    console.log(window.location.href)
     const [value, setValue] = useState(0);
     useEffect(() => {
         switch (window.location.href) {

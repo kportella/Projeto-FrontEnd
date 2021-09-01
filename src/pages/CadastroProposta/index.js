@@ -6,12 +6,21 @@ import FormPessoal from '../../components/FormPessoal';
 import FormResidencia from '../../components/FormResidencia';
 import FormProposta from '../../components/FormProposta';
 import { PropostaContext } from '../../contexts/proposta';
-import { ExitToApp, Search, Add } from '@material-ui/icons'
-import { Link } from 'react-router-dom';
+
 import BarraNavegacao from '../../components/BarraNavegacao';
+import { useEffect } from 'react';
 
 function CadastroProposta() {
-    const { proposta, setProposta } = useContext(PropostaContext)
+    const { proposta, setProposta,
+        setDataSituacao,
+        setUsuario,
+        setSituacao } = useContext(PropostaContext)
+
+    useEffect(() => {
+        setDataSituacao(new Date().toISOString())
+        setUsuario(sessionStorage.usuario)
+        setSituacao('AG')
+    }, [])
 
 
     return (

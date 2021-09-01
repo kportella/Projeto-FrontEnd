@@ -19,6 +19,7 @@ function FormProposta() {
         ConsultarConveniada().then(conveniada => {
             setConveniadas(conveniada);
         })
+        console.log(conveniadas)
     }, [])
 
     return (
