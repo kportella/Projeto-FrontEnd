@@ -137,15 +137,15 @@ function ConsultarProposta() {
                             <TableRow>
                                 <TableCell>CPF</TableCell>
                                 <TableCell align="left">Nome do Cliente</TableCell>
-                                <TableCell align="right">Proposta</TableCell>
-                                <TableCell align="right">Conveniada</TableCell>
-                                <TableCell align="right">Valor Solicitado</TableCell>
-                                <TableCell align="right">Prazo</TableCell>
+                                <TableCell align="left">Proposta</TableCell>
+                                <TableCell align="left">Conveniada</TableCell>
+                                <TableCell align="left">Valor Solicitado</TableCell>
+                                <TableCell align="left">Prazo</TableCell>
                                 <TableCell align="left">Situação</TableCell>
-                                <TableCell align="right">Valor Financiado</TableCell>
-                                <TableCell align="right">Observação</TableCell>
-                                <TableCell align="right">Data Situação</TableCell>
-                                <TableCell align="right">Usuário</TableCell>
+                                <TableCell align="left">Valor Financiado</TableCell>
+                                <TableCell align="left">Observação</TableCell>
+                                <TableCell align="left">Data Situação</TableCell>
+                                <TableCell align="left">Usuário</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -155,15 +155,15 @@ function ConsultarProposta() {
                                         {proposta.treinaPropostasEntity.cpf}
                                     </TableCell>
                                     <TableCell align="left">{proposta.treinaClientesEntity.nome}</TableCell>
-                                    <TableCell align="right">{proposta.treinaPropostasEntity.proposta}</TableCell>
-                                    <TableCell align="right">{proposta.treinaPropostasEntity.descricaoConveniada}</TableCell>
-                                    <TableCell align="right">{proposta.treinaPropostasEntity.vlr_Solicitado}</TableCell>
-                                    <TableCell align="right">{proposta.treinaPropostasEntity.prazo}</TableCell>
-                                    <TableCell align="right">{proposta.treinaPropostasEntity.descricaoSituacao}</TableCell>
-                                    <TableCell align="right">{proposta.treinaPropostasEntity.vlr_Financiado}</TableCell>
-                                    <TableCell align="right">{proposta.treinaPropostasEntity.observacao}</TableCell>
-                                    <TableCell align="right">{proposta.treinaPropostasEntity.dt_Situacao.split('T')[0]}</TableCell>
-                                    <TableCell align="right">{proposta.treinaPropostasEntity.usuario}</TableCell>
+                                    <TableCell align="left">{proposta.treinaPropostasEntity.proposta}</TableCell>
+                                    <TableCell align="left">{proposta.treinaPropostasEntity.descricaoConveniada}</TableCell>
+                                    <TableCell align="left">{proposta.treinaPropostasEntity.vlr_Solicitado}</TableCell>
+                                    <TableCell align="left">{proposta.treinaPropostasEntity.prazo}</TableCell>
+                                    <TableCell align="left">{proposta.treinaPropostasEntity.descricaoSituacao}</TableCell>
+                                    <TableCell align="left">{proposta.treinaPropostasEntity.vlr_Financiado}</TableCell>
+                                    <TableCell align="left">{proposta.treinaPropostasEntity.observacao}</TableCell>
+                                    <TableCell align="left">{proposta.treinaPropostasEntity.dt_Situacao.split('T')[0]}</TableCell>
+                                    <TableCell align="left">{proposta.treinaPropostasEntity.usuario}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
