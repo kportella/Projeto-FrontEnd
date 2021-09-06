@@ -1,6 +1,6 @@
 import { Grid, TextField, Button } from "@material-ui/core";
 import { useContext, useState } from "react";
-import { PropostaContext } from "../../contexts/proposta";
+import { PropostaContext } from "../../../../contexts/proposta";
 
 function FormCEP() {
 

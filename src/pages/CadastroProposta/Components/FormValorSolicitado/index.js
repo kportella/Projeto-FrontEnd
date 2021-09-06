@@ -1,6 +1,6 @@
 import { Grid, TextField, Button } from "@material-ui/core"
 import { useContext } from "react"
-import { PropostaContext } from "../../contexts/proposta"
+import { PropostaContext } from "../../../../contexts/proposta"
 
 function FormValorSolicitado() {
     const { valorSolicitado, setValorSolicitado,

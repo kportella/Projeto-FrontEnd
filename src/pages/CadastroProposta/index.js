@@ -2,9 +2,9 @@ import { useContext } from 'react';
 import { Grid, Typography, TextField, BottomNavigation, BottomNavigationAction, Icon } from '@material-ui/core'
 import './CadastroProposta.css';
 import '@fontsource/roboto'
-import FormPessoal from '../../components/FormPessoal';
-import FormResidencia from '../../components/FormResidencia';
-import FormProposta from '../../components/FormProposta';
+import FormPessoal from './Components/FormPessoal';
+import FormResidencia from './Components/FormResidencia';
+import FormProposta from './Components/FormProposta';
 import { PropostaContext } from '../../contexts/proposta';
 
 import BarraNavegacao from '../../components/BarraNavegacao';

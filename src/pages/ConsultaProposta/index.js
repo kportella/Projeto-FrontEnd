@@ -33,7 +33,7 @@ function ConsultarProposta() {
             stringFinal = substring1[0] + substring1[1] + substring2[0] + substring2[1]
         }
         console.log(stringFinal)
-        if (ValidarCPF(stringFinal)) {
+        if (ValidarCPF(stringFinal) || stringFinal.length == 0) {
             setHasError({ cpf: { hasError: false } })
 
         }
@@ -121,7 +121,7 @@ function ConsultarProposta() {
                         onChange={e => onHandleSetMascaraCPF(e)}
                         onBlur={e => onHandleCPF(e)}
                         error={hasError.cpf.hasError}
-                        helperText={hasError.cpf.hasError == true ? hasError.cpf.text : 'Obrigatório'} />
+                        helperText={hasError.cpf.hasError == true ? hasError.cpf.text : 'Opcional'} />
                 </Grid>
                 <Grid item>
                     <Button variant='contained' color='primary' onClick={e => getData(e)}>

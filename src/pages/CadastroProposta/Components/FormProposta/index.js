@@ -1,8 +1,8 @@
 import { Grid, TextField, Button, MenuItem } from "@material-ui/core";
 import { useContext, useEffect, useState } from "react";
-import { PropostaContext } from "../../contexts/proposta";
+import { PropostaContext } from "../../../../contexts/proposta";
 import FormValorSolicitado from "../FormValorSolicitado";
-import { ConsultarConveniada, VerificarSituacao } from "../../services/proposta"
+import { ConsultarConveniada, VerificarSituacao } from '../../../../services/proposta'
 
 function FormProposta() {
     const { conveniadas, setConveniadas,
