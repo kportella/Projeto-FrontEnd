@@ -2,16 +2,87 @@ import { Button, Grid, TextField } from "@material-ui/core"
 import { useCallback, useContext, useState } from "react"
 import { PropostaContext } from "../../../../contexts/proposta"
 import { mCPF, ValidarCPF, } from '../../../../services/propostas-services'
+import { ConsultarCPF, VerificarSituacao } from '../../../../services/proposta-routes'
 
 
 function FormCPF() {
-    const { cpf, setCPF, buttonConsultarCPF, regexp, setHasError, hasError } = useContext(PropostaContext)
+    const { cpf, setCPF,
+        regexp,
+        setHasError,
+        hasError,
+        setProposta,
+        setNome,
+        setValorSolicitado,
+        setPrazo,
+        setObservacao,
+        setDataNascimento,
+        setGenero,
+        setValorSalario,
+        setCEP,
+        setNumeroResidencia,
+        setValorFinanciado,
+        setLogradouro,
+        setBairro,
+        setCidade,
+        setDataSituacao,
+        setSituacao,
+        setUsuario,
+        setConveniada,
+        setDescricaoSituacao
+    } = useContext(PropostaContext)
 
     const [mascaraCPF, setMascaraCPF] = useState('')
 
     const onHandleSetMascaraCPF = (e) => {
         if ((e.target.value === '' || regexp.test(e.target.value)) && e.target.value.length <= 11) setCPF(e.target.value)
         if (e.target.value.length <= 14) setMascaraCPF(mCPF(e.target.value))
+    }
+
+    const buttonConsultarCPF = async (e) => {
+        e.preventDefault();
+        const response = await ConsultarCPF(cpf);
+        console.log(response)
+        if (response.treinaClientesEntity != null && response.treinaPropostasEntity != null) {
+            setProposta(response.treinaPropostasEntity.proposta)
+            setNome(response.treinaClientesEntity.nome)
+            setValorSolicitado(response.treinaPropostasEntity.vlr_Solicitado)
+            setPrazo(response.treinaPropostasEntity.prazo)
+            setObservacao(response.treinaPropostasEntity.observacao)
+            setDataNascimento(new Date(response.treinaClientesEntity.dt_Nascimento).toISOString().split('T')[0])
+            setGenero(response.treinaClientesEntity.genero)
+            setValorSalario(response.treinaClientesEntity.vlr_Salario)
+            setCEP(response.treinaClientesEntity.cep)
+            setNumeroResidencia(response.treinaClientesEntity.numero_Residencia)
+            setValorFinanciado(response.treinaPropostasEntity.vlr_Financiado)
+            setLogradouro(response.treinaClientesEntity.logradouro)
+            setBairro(response.treinaClientesEntity.bairro)
+            setCidade(response.treinaClientesEntity.cidade)
+            setDataSituacao(response.treinaPropostasEntity.dt_Situacao)
+            setSituacao(response.treinaPropostasEntity.situacao)
+            setUsuario(response.treinaPropostasEntity.usuario)
+            setConveniada(response.treinaPropostasEntity.conveniada)
+            setDescricaoSituacao(await VerificarSituacao(response.treinaPropostasEntity.situacao))
+        }
+        else {
+            setProposta('')
+            setNome('')
+            setValorSolicitado('')
+            setPrazo('')
+            setObservacao('')
+            setDataNascimento('')
+            setGenero('M')
+            setValorSalario('')
+            setCEP('')
+            setNumeroResidencia('')
+            setValorFinanciado('')
+            setLogradouro('')
+            setBairro('')
+            setCidade('')
+            setConveniada('000020')
+            setSituacao('AG')
+            setDataSituacao(new Date().toISOString())
+            setUsuario(sessionStorage.usuario)
+        }
     }
 
     const onHandleCPF = useCallback((e) => {

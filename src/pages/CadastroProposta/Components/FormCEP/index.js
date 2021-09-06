@@ -1,10 +1,36 @@
 import { Grid, TextField, Button } from "@material-ui/core";
 import { useContext, useState } from "react";
 import { PropostaContext } from "../../../../contexts/proposta";
+import { ConsultarCEP } from "../../../../services/proposta-routes"
 
 function FormCEP() {
 
-    const { cep, handleCEP, setCEP, regexp, hasErrorCEP } = useContext(PropostaContext)
+    const { cep, setCEP, regexp, hasErrorCEP, setHasErrorCEP, setLogradouro, setBairro, setCidade } = useContext(PropostaContext)
+
+    const handleCEP = async (e) => {
+        e.preventDefault();
+        const body = {
+            CEP: cep
+        }
+        const response = await ConsultarCEP(body);
+        switch (response) {
+            case 1:
+                setHasErrorCEP({ cep: { hasError: true, text: "CEP não encontrado" } })
+                break;
+            case 2:
+                setHasErrorCEP({ cep: { hasError: true, text: "Formato de CEP inválido" } })
+                break;
+            case 3:
+                setHasErrorCEP({ cep: { hasError: true, text: "CEP vazio" } })
+                break;
+            default:
+                setHasErrorCEP({ cep: { hasError: false } })
+                setLogradouro(response.logradouro);
+                setBairro(response.bairro);
+                setCidade(response.localidade);
+                break;
+        }
+    }
 
     const onHandleSetCEP = (e) => {
         if ((e.target.value === '' || regexp.test(e.target.value)) && e.target.value.length <= 9) setCEP(e.target.value)

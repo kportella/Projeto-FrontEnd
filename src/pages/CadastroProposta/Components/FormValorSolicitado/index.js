@@ -1,12 +1,23 @@
 import { Grid, TextField, Button } from "@material-ui/core"
 import { useContext } from "react"
 import { PropostaContext } from "../../../../contexts/proposta"
+import { CalcularValor } from "../../../../services/proposta-routes"
 
 function FormValorSolicitado() {
     const { valorSolicitado, setValorSolicitado,
-        prazo, setPrazo,
-        handleValorSolicitado
+        prazo, setPrazo, setValorFinanciado
     } = useContext(PropostaContext)
+
+    const handleValorSolicitado = async (e) => {
+        e.preventDefault();
+        let Prazo = parseInt(prazo);
+        let Vlr_Solicitado = parseFloat(valorSolicitado)
+        if (isNaN(Prazo) || isNaN(Vlr_Solicitado)) {
+            return alert("Valor Solicitado e/ou Prazo não podem ser vazios")
+        }
+        const valorRecebido = await CalcularValor({ Prazo, Vlr_Solicitado });
+        setValorFinanciado(valorRecebido.vlr_Solicitado)
+    }
 
 
     return (
