@@ -3,7 +3,8 @@ import { useContext } from "react";
 import { useCallback, useEffect, useState } from "react";
 import BarraNavegacao from "../../components/BarraNavegacao";
 import { PropostaContext } from "../../contexts/proposta";
-import { ConsultarConveniada, ConsultarCPF, mCPF, PegarTodasPropostas, TodasDescricoes, ValidarCPF, VerificarSituacao } from "../../services/proposta";
+import { ConsultarConveniada, ConsultarCPF, PegarTodasPropostas, TodasDescricoes } from "../../services/proposta-routes";
+import { VerificarSituacao, ValidarCPF, mCPF } from "../../services/propostas-services"
 
 function ConsultarProposta() {
 

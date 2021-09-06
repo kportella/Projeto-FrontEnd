@@ -1,7 +1,7 @@
 import { Button, Grid, TextField } from "@material-ui/core"
 import { useCallback, useContext, useState } from "react"
 import { PropostaContext } from "../../../../contexts/proposta"
-import { mCPF, ValidarCPF, } from '../../../../services/proposta'
+import { mCPF, ValidarCPF, } from '../../../../services/propostas-services'
 
 
 function FormCPF() {

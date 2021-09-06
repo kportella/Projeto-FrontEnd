@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, createContext } from 'react';
-import { calcularIdade, CalcularValor, ConsultarCEP, ConsultarConveniada, ConsultarCPF, EnvioProposta, ValidarCPF, isEmpty, VerificarSituacao } from '../services/proposta'
-
+import { CalcularValor, ConsultarCEP, ConsultarConveniada, ConsultarCPF, EnvioProposta, VerificarSituacao } from '../services/proposta-routes'
+import { ValidarCPF, isEmpty, calcularIdade } from "../services/propostas-services"
 
 export const PropostaContext = createContext({})
 
