@@ -1,73 +1,74 @@
+import api from './api'
+
 export async function EnvioProposta(proposta) {
-    const response = await fetch('http://localhost:5000/api/proposta',
+    const response = api.post("/proposta", {
+        TreinaClientesEntity: proposta.TreinaClientesEntity,
+        TreinaPropostasEntity: proposta.TreinaPropostasEntity
+    },
         {
-            method: 'POST', headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + sessionStorage.token
-            }, body: JSON.stringify(proposta)
-        }).then(e => e.json())
-    return response;
-}
-
-export async function VerificarSituacao(situacao) {
-    const response = await fetch(`http://localhost:5000/api/situacaoproposta/${situacao}`,
-        {
-            method: 'GET', headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + sessionStorage.token
-            }
-        }).then(e => e.json())
-
-    return response.descricao;
-}
-
-export async function TodasDescricoes() {
-    const response = await fetch('http://localhost:5000/api/situacaoproposta', {
-        method: 'GET', headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + sessionStorage.token
+            headers: { Authorization: 'Bearer ' + sessionStorage.token }
         }
-    }).then(e => e.json())
+    )
     return response
 }
 
-export async function PegarTodasPropostas() {
-    const response = await fetch(`http://localhost:5000/api/proposta/usuario/${sessionStorage.usuario}`,
+export async function VerificarSituacao(situacao, setDescricaoSituacao) {
+    api.get(`/situacaoproposta/${situacao}`,
         {
-            method: 'GET', headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + sessionStorage.token
-            }
-        }).then(e => e.json())
+            headers: { Authorization: 'Bearer ' + sessionStorage.token }
+        }
+    ).then(resp => setDescricaoSituacao(resp.data.descricao))
+}
+
+export async function TodasDescricoes() {
+    const response = api.get('/situacaoproposta',
+        {
+            headers: { Authorization: 'Bearer ' + sessionStorage.token }
+        }
+    )
+
     return response;
+
+}
+
+export async function PegarTodasPropostas() {
+    const response = api.get(`/proposta/usuario/${sessionStorage.usuario}`,
+        {
+            headers: { Authorization: 'Bearer ' + sessionStorage.token }
+        }
+    )
+
+    return response
 }
 
 export async function ConsultarCPF(cpf) {
-    const response = await fetch(`http://localhost:5000/api/proposta/${cpf}`,
+    const response = api.get(`proposta/${cpf}`,
         {
-            method: 'GET', headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + sessionStorage.token
-            }
-        }).then(e => e.json())
-    return response;
+            headers: { Authorization: 'Bearer ' + sessionStorage.token }
+        }
+    )
+
+    return (await response).data
 }
 
 export async function ConsultarCEP(body) {
-
     if (body.CEP !== "") {
         let validaCep = /^[0-9]{8}$/;
         if (validaCep.test(body.CEP)) {
-            const response = await fetch('http://localhost:5000/api/cep', {
-                method: 'POST', headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + sessionStorage.token
-                }, body: JSON.stringify(body)
-            }).then(e => e.json())
-
-            if (!("erro" in response))
-                return (response)
+            const response = api.post('http://localhost:5000/api/cep',
+                {
+                    CEP: body.CEP
+                },
+                {
+                    headers: { Authorization: 'Bearer ' + sessionStorage.token }
+                }
+            )
+            if (!("erro" in (await response).data)) {
+                console.log('entrou')
+                return (await response).data
+            }
             else {
+
                 return 1;
             }
         }
@@ -81,24 +82,25 @@ export async function ConsultarCEP(body) {
 }
 
 export async function ConsultarConveniada() {
-    const response = await fetch('http://localhost:5000/api/conveniada', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + sessionStorage.token
+    const response = api.get('/conveniada',
+        {
+            headers: { Authorization: 'Bearer ' + sessionStorage.token }
         }
-    }).then(e => e.json());
-    return response;
+    )
+
+    return (await response).data;
 }
 
 export async function CalcularValor(param) {
-    const response = await fetch('http://localhost:5000/api/calcularproposta', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + sessionStorage.token
-        }, body: JSON.stringify(param)
-    });
+    const response = api.post('/calcularproposta',
+        {
+            Prazo: param.Prazo,
+            Vlr_Solicitado: param.Vlr_Solicitado
+        },
+        {
+            headers: { Authorization: 'Bearer ' + sessionStorage.token }
+        })
 
-    return await response.json();
+    return (await response).data
 }
+

@@ -1,5 +1,5 @@
 import { Button, Grid, TextField } from "@material-ui/core"
-import { useCallback, useContext, useState } from "react"
+import { useCallback, useContext, useEffect, useState } from "react"
 import { PropostaContext } from "../../../../contexts/proposta"
 import { mCPF, ValidarCPF, } from '../../../../services/propostas-services'
 import { ConsultarCPF, VerificarSituacao } from '../../../../services/proposta-routes'
@@ -41,7 +41,6 @@ function FormCPF() {
     const buttonConsultarCPF = async (e) => {
         e.preventDefault();
         const response = await ConsultarCPF(cpf);
-        console.log(response)
         if (response.treinaClientesEntity != null && response.treinaPropostasEntity != null) {
             setProposta(response.treinaPropostasEntity.proposta)
             setNome(response.treinaClientesEntity.nome)
@@ -61,7 +60,7 @@ function FormCPF() {
             setSituacao(response.treinaPropostasEntity.situacao)
             setUsuario(response.treinaPropostasEntity.usuario)
             setConveniada(response.treinaPropostasEntity.conveniada)
-            setDescricaoSituacao(await VerificarSituacao(response.treinaPropostasEntity.situacao))
+            await VerificarSituacao(response.treinaPropostasEntity.situacao, setDescricaoSituacao)
         }
         else {
             setProposta('')
@@ -94,7 +93,6 @@ function FormCPF() {
             substring2 = substring1[2].split('-')
             stringFinal = substring1[0] + substring1[1] + substring2[0] + substring2[1]
         }
-        console.log(stringFinal)
         if (ValidarCPF(stringFinal)) {
             setHasError({ cpf: { hasError: false } })
 

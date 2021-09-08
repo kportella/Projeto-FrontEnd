@@ -2,7 +2,7 @@ import { Grid, TextField, Button, MenuItem } from "@material-ui/core";
 import { useContext, useEffect, useState } from "react";
 import { PropostaContext } from "../../../../contexts/proposta";
 import FormValorSolicitado from "../FormValorSolicitado";
-import { ConsultarConveniada, VerificarSituacao, EnvioProposta } from '../../../../services/proposta-routes'
+import { ConsultarConveniada, EnvioProposta } from '../../../../services/proposta-routes'
 import { calcularIdade, isEmpty, ValidarCPF } from "../../../../services/propostas-services"
 
 function FormProposta() {
@@ -84,7 +84,6 @@ function FormProposta() {
         ConsultarConveniada().then(conveniada => {
             setConveniadas(conveniada);
         })
-        console.log(conveniadas)
     }, [])
 
     return (

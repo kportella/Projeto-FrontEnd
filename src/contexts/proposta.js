@@ -57,7 +57,8 @@ function PropostaProvider({ children }) {
             situacao, setDataSituacao,
             regexp, setSituacao,
             usuario, setUsuario,
-            descricaoSituacao
+            descricaoSituacao, setDescricaoSituacao,
+            dataAtualizacao
         }}>
             {children}
         </PropostaContext.Provider>
