@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { PropostaContext } from "../../../../contexts/proposta";
 import FormValorSolicitado from "../FormValorSolicitado";
 import { ConsultarConveniada, EnvioProposta } from '../../../../services/proposta-routes'
-import { calcularIdade, isEmpty, ValidarCPF } from "../../../../services/propostas-services"
+import { calcularIdade, isEmpty, ValidarCPF, handleSubmit } from "../../../../services/propostas-services"
 
 function FormProposta() {
     const { conveniadas, setConveniadas,
@@ -28,57 +28,27 @@ function FormProposta() {
         bairro,
         cidade,
         cep,
-        setProposta
+        setProposta,
+        setNome,
+        setValorSolicitado,
+        setPrazo,
+        setObservacao,
+        setDataNascimento,
+        setGenero,
+        setValorSalario,
+        setCEP,
+        setNumeroResidencia,
+        setValorFinanciado,
+        setLogradouro,
+        setBairro,
+        setSituacao,
+        setDataSituacao,
+        setUsuario,
+        setCidade,
+        setCPF
     } = useContext(PropostaContext)
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        const idadePermitida = calcularIdade(new Date(dataNascimento))
-        const TreinaPropostasEntity = {
-            CPF: cpf,
-            Conveniada: conveniada,
-            Vlr_Solicitado: parseFloat(valorSolicitado),
-            Prazo: parseInt(prazo),
-            Observacao: observacao,
-            Vlr_Financiado: parseFloat(valorFinanciado),
-            Situacao: situacao,
-            Dt_Situacao: dataSituacao,
-            Usuario: usuario,
-            Usuario_Atualizacao: "SISTEMA",
-            Data_Atualizacao: dataAtualizacao
-        }
-        const TreinaClientesEntity = {
-            CPF: cpf,
-            Nome: nome,
-            Dt_Nascimento: new Date(dataNascimento),
-            Genero: genero,
-            Vlr_Salario: parseFloat(valorSalario),
-            Logradouro: logradouro,
-            Numero_Residencia: numeroResidencia,
-            Bairro: bairro,
-            Cidade: cidade,
-            CEP: cep,
-            Usuario_Atualizacao: "SISTEMA",
-            Data_Atualizacao: dataAtualizacao
-        }
-        const total = [...isEmpty(TreinaPropostasEntity), ...isEmpty(TreinaClientesEntity)]
-        if (total.length === 0) {
-            if (idadePermitida && (ValidarCPF(cpf))) {
 
-                const response = await EnvioProposta({ TreinaPropostasEntity, TreinaClientesEntity });
-                alert('Proposta Cadastrada')
-                setProposta(response);
-            }
-            else {
-                if (idadePermitida) alert('CPF inválido')
-            }
-        }
-        else {
-            if (total.length > 1) alert(`Os campos ${total} são obrigatorios`);
-            else alert(`O campo ${total} é obrigatorio`)
-        }
-        console.log(proposta)
-    }
 
     useEffect(() => {
         ConsultarConveniada().then(conveniada => {
@@ -146,11 +116,48 @@ function FormProposta() {
                         maxRows={5}
                         value={observacao}
                         InputProps={{
-                            readOnly: true,
+                            readOnly: false,
                         }} />
                 </Grid>
                 <Grid item>
-                    <Button variant='contained' color='primary' onClick={e => handleSubmit(e)}>
+                    <Button variant='contained' color='primary' onClick={e => handleSubmit(e, dataNascimento,
+                        cpf,
+                        valorSolicitado,
+                        prazo,
+                        situacao,
+                        dataAtualizacao,
+                        nome,
+                        genero,
+                        valorSalario,
+                        logradouro,
+                        numeroResidencia,
+                        bairro,
+                        cidade,
+                        cep,
+                        setProposta,
+                        setNome,
+                        setValorSolicitado,
+                        setPrazo,
+                        setObservacao,
+                        setDataNascimento,
+                        setGenero,
+                        setValorSalario,
+                        setCEP,
+                        setNumeroResidencia,
+                        setValorFinanciado,
+                        setLogradouro,
+                        setBairro,
+                        setSituacao,
+                        setDataSituacao,
+                        setUsuario,
+                        setCidade,
+                        setCPF,
+                        conveniada,
+                        observacao,
+                        valorFinanciado,
+                        dataSituacao,
+                        usuario,
+                        setConveniada)}>
                         Gravar Proposta
                     </Button>
                 </Grid>

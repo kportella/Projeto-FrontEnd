@@ -9,7 +9,7 @@ export async function EnvioProposta(proposta) {
             headers: { Authorization: 'Bearer ' + sessionStorage.token }
         }
     )
-    return response
+    return (await response).data
 }
 
 export async function VerificarSituacao(situacao, setDescricaoSituacao) {
@@ -27,7 +27,7 @@ export async function TodasDescricoes() {
         }
     )
 
-    return response;
+    return (await response).data;
 
 }
 
@@ -38,7 +38,7 @@ export async function PegarTodasPropostas() {
         }
     )
 
-    return response
+    return (await response).data
 }
 
 export async function ConsultarCPF(cpf) {
@@ -64,7 +64,6 @@ export async function ConsultarCEP(body) {
                 }
             )
             if (!("erro" in (await response).data)) {
-                console.log('entrou')
                 return (await response).data
             }
             else {

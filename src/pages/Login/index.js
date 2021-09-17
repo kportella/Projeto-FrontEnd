@@ -20,7 +20,6 @@ function Login() {
         evt.preventDefault();
 
         let control = await SignIn({ usuario, senha }, setErroMessage)
-        console.log(sessionStorage.getItem('token'))
         if (control) {
             history.push('/cadastroproposta')
         }
